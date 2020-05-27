@@ -1,0 +1,96 @@
+
+  <!-- Content here -->
+
+<div class="well span12">
+  <h4>Hello <%= current_user.username.capitalize %></h4>
+
+  <% if current_user %>
+  <div class="buttons">
+    <%if current_user.clocks.last%>
+    <%if current_user.today_first_clockin_time.first != nil && current_user.today_first_clockin_time.first == current_user.today_first_clockin_time.last%>
+    Clock in : <%= punch_in_time(current_user.today_first_clockin_time.first)%> <br>
+    <%elsif current_user.today_first_clockin_time.first != nil && current_user.today_first_clockin_time.first != current_user.today_first_clockin_time.last %>
+    First Clock in : <%= punch_in_time(current_user.today_first_clockin_time.first)%> <br>
+    Current Clock in : <%= punch_in_time(current_user.today_first_clockin_time.last) %> <br>
+    <%else%>
+    First Clock in : Click on Clock in<br>
+    <%end%>
+
+    <%end%>
+    Today Work hrs : <%= format_total_time(current_user.today_time_on_user) %>  (Afrer clock out it will update.)
+  </div>
+  <% end %>
+
+  <% if @user.jobs == 0 %>
+  You dont have any jobs. 
+  <% else %>
+  You currently have <strong><%= @user.jobs.size %></strong> jobs.
+  <% end %>
+  <br><br>
+  <%= link_to 'Add a Job', new_job_path, class: 'btn btn-info' %>
+
+</div>
+
+
+
+<% @user.jobs.order(id: :asc).in_groups_of(2).each do |group| %>
+<tr >
+  <% group.each do |job| %>
+  <%if job %>
+  <td>    
+    <div class="well span8">
+      <div>
+        <h4>Job Title: <%= link_to job.name, job_path(job) %></h4>
+        <p>
+          <strong>Description:</strong> <%= job.description %>
+        </p>
+        <p>Last Punch</p>
+        <%= render 'current_punch', job: job %>
+      </div>
+      <table class="span7">
+        <tr>
+          <td>
+            <%if job.completed? != true%>
+            <div class="buttons">
+              <%= render 'shared/punch_buttons', job: job %>
+            </div>
+            <%end%>
+            <p>
+              <%= link_to "view all punches for #{job.name}", job_path(job) %>
+            </p>
+          </td>
+          <td align="right">
+            <%= render 'shared/restart_complete_buttons', job: job %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h3>
+              Total Time: <%= format_total_time(job.total_time_on_job) %>
+            </h3>
+          </td>
+          <td align="right">
+            <%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          </td>
+        </tr>
+      </table>
+    </div>  
+  </td>
+  <%end%>
+  <%end%>
+</tr>
+<% end %>
+
+<!-- <script type="text/javascript">
+   setTimeout(function(){
+       location.reload();
+   },10000);
+</script>
+</html> -->
+<!-- <script type="text/javascript">
+    function autoRefreshPage()
+    {
+        window.location = window.location.href;
+    }
+    setInterval('autoRefreshPage()', 10000);
+</script> -->

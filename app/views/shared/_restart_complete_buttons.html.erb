@@ -1,0 +1,7 @@
+ <%if job.current_punch_in == nil%>
+ <%if job.completed?%>
+ <%= link_to 'Restart', restart_job_path(job), method: 'POST', class: 'btn btn-warning' %>
+ <%else%>
+ <%= link_to 'Complete', complete_job_path(job), method: 'POST', class: 'btn btn-primary' %>
+ <% end %>
+ <%end%>

@@ -1,0 +1,40 @@
+
+<table class="table table-striped">
+  <tr>
+  	<th>
+  		
+  	</th>
+  		<%days = Time.days_in_month(Time.now.month) %>
+  		<%for d in 1..days%>
+  		<th>
+			<%=Time.now.strftime("#{sprintf '%02d',d}""/%m") %>
+  		</th>
+  		<%end%>
+  </tr>
+  <%@users.each do |user|%>
+  <tr>
+  	<td>
+  		<%= link_to user.username, user%>
+  	</td>
+
+		<%for d in 1..days%>
+			<%day = Time.now.strftime("#{sprintf '%02d',d}""%m%Y") %>
+			<%total = 0%>
+			<td>
+			<%user.clocks.each do |clock|%>	
+				<%if clock.clock_out != nil && (clock.created_at.strftime("%d%m%Y").to_s == day)%>
+				<%clock_in_time = clock.created_at%>
+        		<%clock_out_time = clock.clock_out%>
+        		<%total_time = clock_out_time - clock_in_time%>
+        		<%total += total_time%>    		
+    			<%end%>
+    			
+    		<%end%>
+    			<%=total != 0 ? format_total_time(total):"-" %>
+    		</td>
+     	<% end %>
+  	</tr>
+ <%end%>
+ 
+</table>
+

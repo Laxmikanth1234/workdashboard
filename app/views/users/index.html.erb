@@ -1,0 +1,34 @@
+<table class="table table-striped">
+  <tr>
+    <th colspan="5"><h5 class="current_time">Today   <%= punch_in_date(Time.now) %>  </h5></th>
+  </tr>
+  <tr>
+    <th>Name</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+    <th>Break Time</th>
+    <th>Total</th>    
+  </tr>
+ 	<% @users.each do |user| %>
+	<%total = 0%>
+	<%clock_in_list = []%>
+	<%clock_out_list = []%>
+	<% user.clocks.each do |clock|%>
+		<%if clock.clock_out != nil && (clock.created_at.strftime("%d%m%Y").to_s == Time.now.strftime("%d%m%Y").to_s)%>
+			<%clock_in_time = clock.created_at%>
+			<%clock_in_list << clock.created_at%>
+        	<%clock_out_time = clock.clock_out%>
+        	<%clock_out_list << clock.clock_out%>
+        	<%total_time = clock_out_time - clock_in_time%>
+        	<%total += total_time%>
+        <%end%>
+	<% end %>
+  <tr>
+      <td> <%= link_to user.username, user%> </td>
+      <td><%if user.today_first_clockin_time.first != nil %><%=punch_in_time(user.today_first_clockin_time.first)%><%end%></td>
+      <td><%if clock_out_list.last != nil %><%=punch_in_time(clock_out_list.last)%><%end%></td>
+      <td>--</td>
+      <td> <%=format_total_time(total)%> </td>
+  </tr>
+<%end%>
+</table>

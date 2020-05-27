@@ -1,0 +1,5 @@
+<% if user.currently_clocked_in? %>
+  <%= link_to 'Clock Out', clock_out_user_path(user), method: 'POST', class: 'btn btn-danger'  %>
+<% else %>  
+  <%= link_to 'Clock In', clock_in_user_path(user), method: 'POST',  class: 'btn btn-success'  %>
+<% end %>   

@@ -1,0 +1,27 @@
+<ul class="nav">
+  <li>
+    <%= link_to "VOX Clock!", root_path, :class => 'brand' %>
+  </li>
+ <% if current_user %>
+  <li>
+  	<div class="buttons">
+    <%= render 'shared/clock_buttons', user: current_user %>
+  </div>
+  </li>
+  
+  <li>
+    <%= link_to "Today", users_path  %></li>
+  </li>
+  <li>
+    <%= link_to "Month", users_month_path  %></li>
+  </li>
+  <% end %>
+  <% if current_user %>
+    <li><%= link_to  'LogOut', destroy_user_session_path, method: :delete %></li>
+  <% end %>
+</ul>
+<!-- <h5 id = "current_time" class="current_time"><%= format_datetime(Time.now.in_time_zone(Time.zone.name)) %> </h5>
+ -->
+<!-- <script type="text/javascript">
+    setInterval(function(){ document.getElementById("current_time").innerHTML; }, 3000);
+</script> -->
